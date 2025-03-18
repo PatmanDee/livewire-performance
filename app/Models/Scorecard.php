@@ -17,4 +17,31 @@ class Scorecard extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    public function scorecardModel()
+    {
+        return $this->belongsTo(ScorecardModel::class);
+    }
+
+    public function scorecardAppraisals()
+    {
+        return $this->hasMany(ScorecardAppraisal::class);
+    }
+
+    public function scorecardApprovals()
+    {
+        return $this->hasMany(ScorecardApproval::class);
+    }
+
+    public function performanceRating()
+    {
+        return $this->belongsTo(PerformanceRating::class);
+    }
+
+
+
 }
