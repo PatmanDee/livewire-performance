@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('activity_logs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('company_id')->nullable()->constrained()->nullOnDelete();
-            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
+            $table->unsignedBigInteger('company_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->string('loggable_type')->nullable(); // For polymorphic relation
             $table->unsignedBigInteger('loggable_id')->nullable(); // For polymorphic relation
             $table->string('action');
@@ -23,6 +23,12 @@ return new class extends Migration
             $table->timestamps();
 
             $table->index(['loggable_type', 'loggable_id']);
+
+            /**
+             * Relationships
+             */
+            $table->foreign('company_id')->references('id')->on('companies')->cascadeOnDelete();
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
         });
     }
 

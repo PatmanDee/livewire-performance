@@ -8,24 +8,24 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('business_units', function (Blueprint $table) {
+        Schema::create('perspectives', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->unsignedBigInteger('manager_id');
             $table->unsignedBigInteger('company_id');
-            $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->decimal('weight', 5, 2)->default(0);
+            $table->integer('display_order')->default(0);
             $table->timestamps();
 
             /**
              * Relationships
              */
-            $table->foreign('manager_id')->references('id')->on('users')->cascadeOnDelete();
             $table->foreign('company_id')->references('id')->on('companies')->cascadeOnDelete();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('business_units');
+        Schema::dropIfExists('perspectives');
     }
 };

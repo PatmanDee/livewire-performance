@@ -10,10 +10,10 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('company_id')->nullable()->constrained()->nullOnDelete();
             $table->string('first_name');
             $table->string('last_name');
             $table->string('email')->unique();
+            $table->string('password');
             $table->string('phone_number')->nullable();
             $table->date('date_of_birth')->nullable();
             $table->enum('gender', ['male', 'female', 'other'])->nullable();
@@ -27,49 +27,33 @@ return new class extends Migration
             $table->string('workforce_id')->nullable();
             $table->string('national_id')->nullable();
             $table->string('passport_number')->nullable();
-            $table->string('marital_status')->nullable();
+            $table->enum('marital_status', ['single', 'married', 'divorced', 'widowed'])->nullable();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->unsignedBigInteger('company_id'); // Reference to the company
+            $table->unsignedBigInteger('supervisor_id')->nullable();
+            $table->unsignedBigInteger('department_id');
+            $table->unsignedBigInteger('business_unit_id');
+            $table->unsignedBigInteger('team_id')->nullable();
+            $table->unsignedBigInteger('scorecard_model_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
+
+            /**
+             * Relationships
+             */
+            $table->foreign('supervisor_id')->references('id')->on('users')->cascadeOnDelete(); // Self-referencing for supervisor
+            $table->foreign('department_id')->references('id')->on('departments')->cascadeOnDelete();
+            $table->foreign('team_id')->references('id')->on('teams')->cascadeOnDelete();
+            $table->foreign('business_unit_id')->references('id')->on('business_units')->cascadeOnDelete();
+            $table->foreign('scorecard_model_id')->references('id')->on('scorecard_models')->cascadeOnDelete();
+            $table->foreign('company_id')->references('id')->on('companies')->cascadeOnDelete();
         });
 
-        Schema::table('companies', function (Blueprint $table) {
-            $table->foreign('primary_contact_id')->references('id')->on('users')->nullOnDelete();
-        });
-
-        Schema::table('business_units', function (Blueprint $table) {
-            $table->foreign('manager_id')->references('id')->on('users')->nullOnDelete();
-        });
-
-        Schema::table('departments', function (Blueprint $table) {
-            $table->foreign('head_id')->references('id')->on('users')->nullOnDelete();
-        });
-
-        Schema::table('teams', function (Blueprint $table) {
-            $table->foreign('leader_id')->references('id')->on('users')->nullOnDelete();
-        });
 
     }
 
     public function down(): void
     {
-        Schema::table('companies', function (Blueprint $table) {
-            $table->dropForeign(['primary_contact_id']);
-        });
-
-        Schema::table('business_units', function (Blueprint $table) {
-            $table->dropForeign(['manager_id']);
-        });
-
-        Schema::table('departments', function (Blueprint $table) {
-            $table->dropForeign(['head_id']);
-        });
-
-        Schema::table('teams', function (Blueprint $table) {
-            $table->dropForeign(['leader_id']);
-        });
-
         Schema::dropIfExists('users');
     }
 };

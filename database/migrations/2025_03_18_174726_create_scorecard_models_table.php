@@ -6,20 +6,29 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('scorecard_models', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('company_id');
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->boolean('uses_perspectives')->default(true);
+            $table->boolean('uses_goals')->default(true);
+            $table->boolean('uses_kpis')->default(true);
+            $table->boolean('uses_dual_targets')->default(false); // Base and stretch targets
+            $table->boolean('requires_reviewer')->default(false);
+            $table->boolean('uses_weights')->default(true);
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
+
+            /**
+             * Relationships
+             */
+            $table->foreign('company_id')->references('id')->on('companies')->cascadeOnDelete();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('scorecard_models');

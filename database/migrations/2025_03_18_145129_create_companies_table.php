@@ -10,22 +10,23 @@ return new class extends Migration
     {
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('package_id')->nullable()->constrained()->nullOnDelete();
-            $table->foreignId('primary_contact_id')->nullable()->constrained('users')->nullOnDelete();
             $table->string('name');
-            $table->string('slug')->unique();
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
             $table->text('address')->nullable();
             $table->string('logo')->nullable();
             $table->enum('status', ['active', 'inactive', 'suspended'])->default('active');
-            $table->date('subscription_starts_at')->nullable();
-            $table->date('subscription_ends_at')->nullable();
             $table->string('industry')->nullable();
             $table->string('website')->nullable();
-            $table->string('registration_number')->nullable();
-            $table->string('tax_number')->nullable();
+            $table->unsignedBigInteger('owner_id');
+            $table->unsignedBigInteger('package_id')->nullable();
             $table->timestamps();
+
+            /**
+             * Relationships
+             */
+            $table->foreign('owner_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreign('package_id')->references('id')->on('packages')->cascadeOnDelete();
         });
     }
 

@@ -10,14 +10,19 @@ return new class extends Migration
     {
         Schema::create('departments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('company_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('business_unit_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('head_id')->nullable(); // Will be updated after users table exists
             $table->string('name');
-            $table->text('description')->nullable();
+            $table->unsignedBigInteger('business_unit_id'); // Reference to the business unit
+            $table->unsignedBigInteger('manager_id');
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
+
+            /**
+             * Relationships
+             */
+            $table->foreign('business_unit_id')->references('id')->on('business_units')->cascadeOnDelete();
+            $table->foreign('manager_id')->references('id')->on('users')->cascadeOnDelete();
         });
+
     }
 
     public function down(): void
