@@ -10,6 +10,13 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('company_id'); // Reference to the company
+            $table->unsignedBigInteger('supervisor_id')->nullable();
+            $table->unsignedBigInteger('department_id');
+            $table->unsignedBigInteger('business_unit_id');
+            $table->unsignedBigInteger('team_id')->nullable();
+            $table->unsignedBigInteger('scorecard_model_id')->nullable();
+            $table->unsignedBigInteger('account_type_id')->nullable();
             $table->string('first_name');
             $table->string('last_name');
             $table->string('email')->unique();
@@ -24,17 +31,12 @@ return new class extends Migration
             $table->string('profile_picture')->nullable();
             $table->enum('status', ['active', 'inactive', 'terminated', 'on_leave'])->default('active');
             $table->boolean('is_super_admin')->default(false);
+            $table->enum('special_rights', ['none', 'admin_rights', 'full_rights'])->default('none');
             $table->string('workforce_id')->nullable();
             $table->string('national_id')->nullable();
             $table->string('passport_number')->nullable();
             $table->enum('marital_status', ['single', 'married', 'divorced', 'widowed'])->nullable();
             $table->timestamp('email_verified_at')->nullable();
-            $table->unsignedBigInteger('company_id'); // Reference to the company
-            $table->unsignedBigInteger('supervisor_id')->nullable();
-            $table->unsignedBigInteger('department_id');
-            $table->unsignedBigInteger('business_unit_id');
-            $table->unsignedBigInteger('team_id')->nullable();
-            $table->unsignedBigInteger('scorecard_model_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
 
@@ -46,6 +48,7 @@ return new class extends Migration
             $table->foreign('team_id')->references('id')->on('teams')->cascadeOnDelete();
             $table->foreign('business_unit_id')->references('id')->on('business_units')->cascadeOnDelete();
             $table->foreign('scorecard_model_id')->references('id')->on('scorecard_models')->cascadeOnDelete();
+            $table->foreign('account_type_id')->references('id')->on('account_types')->cascadeOnDelete();
             $table->foreign('company_id')->references('id')->on('companies')->cascadeOnDelete();
         });
 
