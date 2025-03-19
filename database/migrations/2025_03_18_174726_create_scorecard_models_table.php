@@ -14,11 +14,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->boolean('uses_perspectives')->default(true);
-            $table->boolean('uses_goals')->default(true);
-            $table->boolean('uses_kpis')->default(true);
             $table->boolean('uses_dual_targets')->default(false); // Base and stretch targets
-            $table->boolean('requires_reviewer')->default(false);
-            $table->boolean('uses_weights')->default(true);
             $table->boolean('is_active')->default(true);
             $table->timestamps();
 

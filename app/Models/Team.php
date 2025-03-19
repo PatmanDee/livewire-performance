@@ -31,7 +31,4 @@ class Team extends Model
     {
         return $this->morphMany(ActivityLog::class, 'loggable');
     }
-
-
-
 }

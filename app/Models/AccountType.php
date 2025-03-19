@@ -9,4 +9,16 @@ class AccountType extends Model
 {
     /** @use HasFactory<\Database\Factories\AccountTypeFactory> */
     use HasFactory;
+    protected $guarded = [];
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    public function users()
+    {
+        return $this->belongsTo(User::class);
+    }
+
 }

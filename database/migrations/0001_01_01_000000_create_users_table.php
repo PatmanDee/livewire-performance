@@ -10,10 +10,10 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('company_id'); // Reference to the company
+            $table->unsignedBigInteger('company_id')->nullable(); // Reference to the company
             $table->unsignedBigInteger('supervisor_id')->nullable();
-            $table->unsignedBigInteger('department_id');
-            $table->unsignedBigInteger('business_unit_id');
+            $table->unsignedBigInteger('department_id')->nullable();
+            $table->unsignedBigInteger('business_unit_id')->nullable();
             $table->unsignedBigInteger('team_id')->nullable();
             $table->unsignedBigInteger('scorecard_model_id')->nullable();
             $table->unsignedBigInteger('account_type_id')->nullable();
@@ -26,7 +26,6 @@ return new class extends Migration
             $table->enum('gender', ['male', 'female', 'other'])->nullable();
             $table->text('address')->nullable();
             $table->date('hire_date')->nullable();
-            $table->string('employee_level')->nullable();
             $table->string('position')->nullable();
             $table->string('profile_picture')->nullable();
             $table->enum('status', ['active', 'inactive', 'terminated', 'on_leave'])->default('active');
